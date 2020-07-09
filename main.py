@@ -48,7 +48,7 @@ print()
 # print(c)
 # print(c.bit_length())
 
-print('Phase 1 auctioneer initilization:', flush=True)
+print('Phase 1 auctioneer initialization:', flush=True)
 for auctioneer in auctioneers:
     auctioneer.phase_1_auctioneer_init()
 success = auction_contract.functions.phase1Success().call()
@@ -59,11 +59,9 @@ else:
     print('Phase 1 success\n', flush=True)
 
 print('Phase 2 bidder join:', flush=True)
-bid_debugs = []
 for bidder in bidders:
-    bid_debug = bidder.phase_2_bidder_join(randrange(len(price)))
+    bidder.phase_2_bidder_join(bidder.index * 2)
     # bid_debug = bidder.phase_2_bidder_join(len(price) - 1)
-    bid_debugs.append(bid_debug)
 
 print('Wait for phase 2 ends:')
 t = auctioneers[0].phase_2_time_left()
@@ -95,10 +93,10 @@ if success == False:
 else:
     print('Phase 3 success\n')
 
-print('Phase 4 second highest bid decision omega:')
+print('Phase 4.1 second highest bid decision omega:')
 auctioneers[1].phase_4_second_highest_bid_decision_omega()
 
-print('Phase 4 second highest bid decision dec:')
+print('Phase 4.2 second highest bid decision dec:')
 while True:
     success = auction_contract.functions.phase4Success().call()
     binarySearchL = auction_contract.functions.binarySearchL().call()
@@ -128,13 +126,33 @@ if success == False:
     exit(1)
 else:
     print('Phase 5 success\n')
-
-print('price = {}'.format(price))
-for bidder in bidders:
-    print('B{} bid_price_j = {}'.format(bidder.index, bidder.bid_price_j))
-
 winnerI = auction_contract.functions.winnerI().call()
 print('winnerI = {}'.format(winnerI))
+
+highest_bid_j = -1
+second_highest_bid_j = -1
+bidder_bids = [bidder.bid_price_j for bidder in bidders]
+bidder_bids.sort()
+for bidder_bid in bidder_bids:
+    if bidder_bid > highest_bid_j:
+        second_highest_bid_j = highest_bid_j
+        highest_bid_j = bidder_bid
+
+for bidder in bidders:
+    if bidder.bid_price_j == highest_bid_j:
+        print('[B{:2}]'.format(bidder.index), end='')
+    else:
+        print(' B{:2} '.format(bidder.index), end='')
+print()
+
+for bidder in bidders:
+    if bidder.bid_price_j == second_highest_bid_j:
+        print('[{:3}]'.format(bidder.bid_price_j), end='')
+    else:
+        print(' {:3} '.format(bidder.bid_price_j), end='')
+print()
+
+print('price = {}'.format(price))
 
 # for auctioneer in auctioneers:
 #     print('A{} balance = {}'.format(auctioneer.index,
@@ -154,6 +172,11 @@ if success == False:
     # exit(1)
 else:
     print('Phase 6 success\n')
+
+for auctioneer in auctioneers:
+    print('A{} used {:,} gas'.format(auctioneer.index, auctioneer.gas))
+for bidder in bidders:
+    print('B{} used {:,} gas'.format(bidder.index, bidder.gas))
 
 # for auctioneer in auctioneers:
 #     print('A{} balance = {}'.format(auctioneer.index,

@@ -47,4 +47,4 @@ def compile():
                 }
             }
         }
-    })
+    }, optimize=True)

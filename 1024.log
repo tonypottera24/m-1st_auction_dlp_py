@@ -1,0 +1,58 @@
+web3 connected!
+Contract created success, used 30,843,758 gas
+A0 x = 32557149590609321361391105822213944724864803978841621078413881236400862730339010260928303236307400665107659591262976121399911565976577438860013775384163469213285346725229389720698642330257864517689149268755060638336264713406265173382771763178454463776488193037196096377294021800860841251148774798436086854058
+A1 x = 53805713972910736964253622398113715856252206397178238483658552346587186401715947843002877124998315821997638361190567996245474493225506071056963457215868896383241994448088891762722086644112510223633767950735331615906201751440748419693444919985377899494541819978219270896268650845899973278582132854339747530608
+
+Phase 1 auctioneer initialization:
+A0 success, used 1,228,529 gas
+A1 success, used 1,297,968 gas
+Phase 1 success
+
+Phase 2 bidder join:
+B0 bid_price_j = 0 success, used 11,211,670 gas
+B1 bid_price_j = 2 success, used 11,235,541 gas
+B2 bid_price_j = 4 success, used 11,232,664 gas
+Wait for phase 2 ends:
+wait 8.00 sec
+Phase 2 failed
+
+Phase 3.1 bidder verification sum 1:
+A0 success, used 6,649,762 gas
+A1 success, used 6,590,430 gas
+Phase 3.2.1 bidder verification 01 omega:
+A1 success, used 120,798,086 gas
+Phase 3.2.2 bidder verification 01 dec:
+A0 success, used 75,334,595 gas
+A1 success, used 99,950,563 gas
+Phase 3 success
+
+Phase 4.1 second highest bid decision omega:
+A1 success, used 41,741,951 gas
+Phase 4.2 second highest bid decision dec:
+(0, 2, 5)
+A0 success, used 7,104,802 gas
+A1 success, used 7,298,531 gas
+(2, 3, 5)
+A0 success, used 7,104,807 gas
+A1 success, used 7,280,693 gas
+(2, 2, 3)
+Phase 4 success
+
+Phase 5 winner decision:
+A0 success, used 12,292,472 gas
+A1 success, used 12,162,693 gas
+Phase 5 success
+
+winnerI = 2
+ B 0  B 1 [B 2]
+   0 [  2]   4 
+price = [1, 2, 3, 4, 5]
+Phase 6 payment:
+B2 payed = 3 success, used 12,168,700 gas
+Phase 6 failed
+
+A0 used 109,714,967 gas
+A1 used 297,120,915 gas
+B0 used 11,211,670 gas
+B1 used 11,235,541 gas
+B2 used 23,401,364 gas

@@ -1,7 +1,7 @@
 from lib.big_number import BigNumber
 from random import randrange
 from lib.same_dl_proof import SameDLProof
-from constants.dlp import DLP1024
+from constants.dlp import DLP
 
 
 class Ct():
@@ -16,21 +16,21 @@ class Ct():
 
     @classmethod
     def from_plaintext(cls, m, y):
-        r = [randrange(1, DLP1024.q) for yy in y]
-        u = [pow(DLP1024.g, rr, DLP1024.p) for rr in r]
-        c = m % DLP1024.p
+        r = [randrange(1, DLP.q) for yy in y]
+        u = [pow(DLP.g, rr, DLP.p) for rr in r]
+        c = m % DLP.p
         for yy, rr in zip(y, r):
-            c = (c * pow(yy, rr, DLP1024.p)) % DLP1024.p
+            c = (c * pow(yy, rr, DLP.p)) % DLP.p
         return cls(u, c)
 
     def decrypt(self, index, x):
         u = self.u[index]
-        assert(0 < u and u < DLP1024.p)
-        assert(0 < x and x < DLP1024.q)
-        ux = pow(u, x, DLP1024.p)
-        ux_inv = pow(ux, -1, DLP1024.p)
-        assert((ux * ux_inv) % DLP1024.p == 1)
-        pi = SameDLProof(u, DLP1024.g, x)
+        assert(0 < u and u < DLP.p)
+        assert(0 < x and x < DLP.q)
+        ux = pow(u, x, DLP.p)
+        ux_inv = pow(ux, -1, DLP.p)
+        assert((ux * ux_inv) % DLP.p == 1)
+        pi = SameDLProof(u, DLP.g, x)
         return ux, ux_inv, pi
 
     def decrypt_to_sol(self, index, x):
@@ -39,12 +39,12 @@ class Ct():
 
     def mul_z(self, z):
         assert(z > 0)
-        return Ct(self.u, (self.c * z) % DLP1024.p)
+        return Ct(self.u, (self.c * z) % DLP.p)
 
     def pow(self, k):
         assert(k > 0)
-        u = [pow(uu, k, DLP1024.p) for uu in self.u]
-        c = pow(self.c, k, DLP1024.p)
+        u = [pow(uu, k, DLP.p) for uu in self.u]
+        c = pow(self.c, k, DLP.p)
         return Ct(u, c)
 
     def to_sol(self):

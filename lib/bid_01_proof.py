@@ -1,11 +1,11 @@
 from random import randrange
 from lib.ct_same_dl_proof import CtSameDLProof
-from constants.dlp import DLP1024
+from constants.dlp import DLP
 
 
 class Bid01Proof():
     def __init__(self, ctu, ctuu):
-        w = randrange(1, DLP1024.q)
+        w = randrange(1, DLP.q)
         self.ctv, self.ctvv = ctu.pow(w), ctuu.pow(w)
         self.pi = CtSameDLProof(ctu, ctuu, w)
 

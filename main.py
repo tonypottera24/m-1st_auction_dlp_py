@@ -15,7 +15,7 @@ web3 = Web3(Web3.HTTPProvider(provider_url,
 
 if web3.isConnected() == False:
     print("web3 connection failed.")
-    exit()
+    exit(1)
 else:
     print("web3 connected!")
 
@@ -49,7 +49,7 @@ print('Phase 1 bidder init:', flush=True)
 for bidder in bidders:
     bidder.phase_1_bidder_init()
 
-print('Wait for phase 1 ends:')
+print('Wait for phase 1 ends:', flush=True)
 t = bidders[0].phase_1_time_left()
 print('wait {:.2f} sec'.format(t), flush=True)
 time.sleep(t + 3)
@@ -57,7 +57,7 @@ time.sleep(t + 3)
 success = auction_contract.functions.phase1Success().call()
 if success == False:
     print('Phase 1 failed\n', flush=True)
-    # exit(1)
+    exit(1)
 else:
     print('Phase 1 success\n', flush=True)
 
@@ -68,40 +68,40 @@ for bidder in bidders:
     # bid_debug = bidder.phase_2_bidder_join(len(price) - 1)
 success = auction_contract.functions.phase2Success().call()
 if success == False:
-    print('Phase 2 failed\n')
+    print('Phase 2 failed\n', flush=True)
     exit(1)
 else:
-    print('Phase 2 success\n')
+    print('Phase 2 success\n', flush=True)
 
-print('Phase 3.1 bidder verification sum 1:')
+print('Phase 3.1 bidder verification sum 1:', flush=True)
 for bidder in bidders:
     bidder.phase_3_bidder_verification_sum_1()
 
-print('Phase 3.2.1 bidder verification 01 omega:')
+print('Phase 3.2.1 bidder verification 01 omega:', flush=True)
 bidders[0].phase_3_bidder_verification_01_omega()
 
-print('Phase 3.2.2 bidder verification 01 dec:')
+print('Phase 3.2.2 bidder verification 01 dec:', flush=True)
 for bidder in bidders:
     bidder.phase_3_bidder_verification_01_dec()
 
 success = auction_contract.functions.phase3Success().call()
 if success == False:
-    print('Phase 3 failed\n')
-    # exit()
+    print('Phase 3 failed\n', flush=True)
+    exit(1)
 else:
-    print('Phase 3 success\n')
+    print('Phase 3 success\n', flush=True)
 
-print('Phase 4.1 second highest bid decision omega:')
+print('Phase 4.1 second highest bid decision omega:', flush=True)
 bidders[0].phase_4_second_highest_bid_decision_omega()
 
-print('Phase 4.2 second highest bid decision dec:')
+print('Phase 4.2 second highest bid decision dec:', flush=True)
 while True:
     success = auction_contract.functions.phase4Success().call()
     binarySearchL = auction_contract.functions.binarySearchL().call()
     binarySearchR = auction_contract.functions.binarySearchR().call()
     secondHighestBidPriceJ = auction_contract.functions.secondHighestBidPriceJ().call()
     print('({}, {}, {})'.format(binarySearchL,
-                                secondHighestBidPriceJ, binarySearchR))
+                                secondHighestBidPriceJ, binarySearchR), flush=True)
     if success or binarySearchL == len(bidders[0].auction_info.price) - 1:
         break
     for bidder in bidders:
@@ -109,23 +109,23 @@ while True:
 
 success = auction_contract.functions.phase4Success().call()
 if success == False:
-    print('Phase 4 failed\n')
+    print('Phase 4 failed\n', flush=True)
     exit(1)
 else:
-    print('Phase 4 success\n')
+    print('Phase 4 success\n', flush=True)
 
-print('Phase 5 winner decision:')
+print('Phase 5 winner decision:', flush=True)
 for bidder in bidders:
     bidder.phase_5_winner_decision()
 
 success = auction_contract.functions.phase5Success().call()
 if success == False:
-    print('Phase 5 failed\n')
+    print('Phase 5 failed\n', flush=True)
     exit(1)
 else:
-    print('Phase 5 success\n')
+    print('Phase 5 success\n', flush=True)
 winnerI = auction_contract.functions.winnerI().call()
-print('winnerI = {}'.format(winnerI))
+print('winnerI = {}'.format(winnerI), flush=True)
 
 highest_bid_j = -1
 second_highest_bid_j = -1
@@ -138,19 +138,19 @@ for bidder_bid in bidder_bids:
 
 for bidder in bidders:
     if bidder.bid_price_j == highest_bid_j:
-        print('[B{:2}]'.format(bidder.index), end='')
+        print('[B{:2}]'.format(bidder.index), end='', flush=True)
     else:
-        print(' B{:2} '.format(bidder.index), end='')
+        print(' B{:2} '.format(bidder.index), end='', flush=True)
 print()
 
 for bidder in bidders:
     if bidder.bid_price_j == second_highest_bid_j:
-        print('[{:3}]'.format(bidder.bid_price_j), end='')
+        print('[{:3}]'.format(bidder.bid_price_j), end='', flush=True)
     else:
-        print(' {:3} '.format(bidder.bid_price_j), end='')
+        print(' {:3} '.format(bidder.bid_price_j), end='', flush=True)
 print()
 
-print('price = {}'.format(bidders[0].auction_info.price))
+print('price = {}'.format(bidders[0].auction_info.price), flush=True)
 
 # for auctioneer in auctioneers:
 #     print('A{} balance = {}'.format(auctioneer.index,
@@ -161,18 +161,18 @@ print('price = {}'.format(bidders[0].auction_info.price))
 # balances = auction_contract.functions.getBalance().call()
 # print('balances = {}'.format(balances))
 
-print('Phase 6 payment:')
+print('Phase 6 payment:', flush=True)
 bidders[winnerI].phase_6_payment()
 
 success = auction_contract.functions.phase6Success().call()
 if success == False:
-    print('Phase 6 failed\n')
+    print('Phase 6 failed\n', flush=True)
     exit(1)
 else:
-    print('Phase 6 success\n')
+    print('Phase 6 success\n', flush=True)
 
 for bidder in bidders:
-    print('B{} used {:,} gas'.format(bidder.index, bidder.gasUsed))
+    print('B{} used {:,} gas'.format(bidder.index, bidder.gasUsed), flush=True)
 
 # for bidder in bidders:
 #     print('B{} balance = {}'.format(bidder.index,

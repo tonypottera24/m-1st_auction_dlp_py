@@ -9,7 +9,7 @@ from lib.tx_print import tx_print
 from lib.bid_01_proof import Bid01Proof
 import time
 from lib.ct import Ct
-from constants.dlp import DLP1024
+from constants.dlp import DLP
 
 
 class Bidder():
@@ -19,13 +19,13 @@ class Bidder():
         self.web3 = web3
         self.auction_contract = auction_contract
         self.auction_info = AuctionInfo(auction_contract)
-        self.x = randrange(1, DLP1024.q)
+        self.x = randrange(1, DLP.q)
         print('B{} x = {}'.format(self.index, self.x))
-        self.y = pow(DLP1024.g, self.x, DLP1024.p)
+        self.y = pow(DLP.g, self.x, DLP.p)
         self.gasUsed = 0
 
     def phase_1_bidder_init(self, value=10):
-        pi = DLProof(DLP1024.g, self.x).to_sol()
+        pi = DLProof(DLP.g, self.x).to_sol()
         tx_hash = self.auction_contract.functions.phase1BidderInit(
             BigNumber.from_py(self.y).to_sol(), pi).transact({'from': self.addr, 'value': value, 'gas': gas_limit})
         tx_receipt = self.web3.eth.waitForTransactionReceipt(tx_hash)
@@ -45,7 +45,7 @@ class Bidder():
         y = [BigNumber.from_sol(yy).to_py() for yy in y]
         bid = []
         for j in range(len(self.auction_info.price)):
-            zt = pow(DLP1024.z, 1 if j == bid_price_j else 0, DLP1024.p)
+            zt = pow(DLP.z, 1 if j == bid_price_j else 0, DLP.p)
             ct = Ct.from_plaintext(zt, y)
             bid.append(ct.to_sol())
         tx_hash = self.auction_contract.functions.phase2BidderSubmitBid(bid).transact(

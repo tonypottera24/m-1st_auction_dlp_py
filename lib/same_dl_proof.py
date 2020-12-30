@@ -13,8 +13,6 @@ class SameDLProof():
                                 BigNumber.from_py(g1).val + BigNumber.from_py(g2).val + BigNumber.from_py(y1).val + BigNumber.from_py(y2).val + BigNumber.from_py(t1).val + BigNumber.from_py(t2).val])
         c = int.from_bytes(c, byteorder='big') % DLP.q
         r = (v - (c * x) % DLP.q) % DLP.q
-        if r < 0:
-            r += DLP.q
         assert(c > 0 and r > 0)
         assert(t1 == (pow(g1, r, DLP.p) * pow(y1, c, DLP.p)) % DLP.p)
         assert(t2 == (pow(g2, r, DLP.p) * pow(y2, c, DLP.p)) % DLP.p)

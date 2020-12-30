@@ -12,8 +12,6 @@ class DLProof():
             BigNumber.from_py(g).val + BigNumber.from_py(y).val + BigNumber.from_py(t).val])
         c = int.from_bytes(c, byteorder='big') % q
         r = (v - (c * x) % q) % q
-        if r < 0:
-            r += q
         assert(t == (pow(g, r, p) * pow(y, c, p)) % p)
         self.t, self.r = t, r
 

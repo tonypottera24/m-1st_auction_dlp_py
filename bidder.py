@@ -58,7 +58,7 @@ class Bidder():
     def phase_3_bidder_verification_sum_1(self):
         bid_prods = self.auction_contract.functions.getBidProd().call()
         bid_prod_dec_sols = [Ct.from_sol(bid_prod).decrypt_to_sol(
-            self.index, self.x) for bid_prod in bid_prods]
+            self.x) for bid_prod in bid_prods]
         ux_sols, ux_inv_sols, pi_sols = list(
             map(list, list(zip(*bid_prod_dec_sols))))
 
@@ -99,9 +99,9 @@ class Bidder():
             ctvs, ctvvs = self.auction_contract.functions.getBidderBid01ProofV(
                 i).call()
             ctv_dec_sols = [Ct.from_sol(ctv).decrypt_to_sol(
-                self.index, self.x) for ctv in ctvs]
+                self.x) for ctv in ctvs]
             ctvv_dec_sols = [Ct.from_sol(ctvv).decrypt_to_sol(
-                self.index, self.x) for ctvv in ctvvs]
+                self.x) for ctvv in ctvvs]
             uxv_sols, uxv_inv_sols, piv_sols = list(
                 map(list, list(zip(*ctv_dec_sols))))
             uxvv_sols, uxvv_inv_sols, pivv_sols = list(
@@ -139,9 +139,9 @@ class Bidder():
         ctv, ctvv = self.auction_contract.functions.getBidC01ProofJV().call()
         # print('ctv, ctvv = {}, {}'.format(ctv, ctvv))
         uxv_sol, uxv_inv_sol, piv_sol = Ct.from_sol(ctv).decrypt_to_sol(
-            self.index, self.x)
+            self.x)
         uxvv_sol, uxvv_inv_sol, pivv_sol = Ct.from_sol(ctvv).decrypt_to_sol(
-            self.index, self.x)
+            self.x)
 
         tx_hash = self.auction_contract.functions.phase4SecondHighestBidDecisionDec(
             uxv_sol, uxv_inv_sol, piv_sol, uxvv_sol, uxvv_inv_sol, pivv_sol).transact({'from': self.addr, 'gas': gas_limit})
@@ -152,7 +152,7 @@ class Bidder():
     def phase_5_winner_decision(self):
         bid_as = self.auction_contract.functions.getBidA().call()
         bid_a_dec_sols = [Ct.from_sol(bid_a).decrypt_to_sol(
-            self.index, self.x) for bid_a in bid_as]
+            self.x) for bid_a in bid_as]
         ux_sols, ux_inv_sols, pi_sols = list(
             map(list, list(zip(*bid_a_dec_sols))))
 
@@ -163,8 +163,8 @@ class Bidder():
         tx_print(tx_receipt, "B{}".format(self.index))
 
     def phase_6_payment(self):
-        secondHighestBidPriceJ = self.auction_contract.functions.secondHighestBidPriceJ().call()
-        price = self.auction_info.price[secondHighestBidPriceJ]
+        secondHighestPriceJ = self.auction_contract.functions.secondHighestPriceJ().call()
+        price = self.auction_info.price[secondHighestPriceJ]
         tx_hash = self.auction_contract.functions.phase6Payment().transact(
             {'from': self.addr, 'value': price, 'gas': gas_limit})
         tx_receipt = self.web3.eth.waitForTransactionReceipt(tx_hash)

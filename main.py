@@ -24,7 +24,7 @@ bidder_count = 3
 
 seller = Seller(accounts[0],
                 price=[p for p in range(1, bidder_count + 1)],
-                time_limit=[10, 10000, 10000, 10000, 10000, 10000],
+                time_limit=[10, 1000000, 1000000, 1000000, 1000000, 1000000],
                 balance_limit=10)
 
 auction_contract = deploy(web3, seller)
@@ -99,9 +99,9 @@ while True:
     success = auction_contract.functions.phase4Success().call()
     binarySearchL = auction_contract.functions.binarySearchL().call()
     binarySearchR = auction_contract.functions.binarySearchR().call()
-    secondHighestBidPriceJ = auction_contract.functions.secondHighestBidPriceJ().call()
+    secondHighestPriceJ = auction_contract.functions.secondHighestPriceJ().call()
     print('({}, {}, {})'.format(binarySearchL,
-                                secondHighestBidPriceJ, binarySearchR), flush=True)
+                                secondHighestPriceJ, binarySearchR), flush=True)
     if success or binarySearchL == len(bidders[0].auction_info.price) - 1:
         break
     for bidder in bidders:

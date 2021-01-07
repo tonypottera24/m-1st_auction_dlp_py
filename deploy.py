@@ -55,8 +55,8 @@ def deploy(web3, seller):
     abi = json.loads(compiled_sol['contracts'][entry_file]
                      [entry_class]['metadata'])['output']['abi']
     auction_contract = web3.eth.contract(abi=abi, bytecode=bytecode)
-    tx_hash = auction_contract.constructor(
-        seller.price, seller.time_limit, seller.balance_limit).transact({'from': seller.addr, 'gas': gas_limit})
+    tx_hash = auction_contract.constructor(seller.m, seller.zm_inv,
+                                           seller.price, seller.time_limit, seller.balance_limit).transact({'from': seller.addr, 'gas': gas_limit})
     tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
     tx_print(tx_receipt, "Contract created")
     # print("addr = {}".format(tx_receipt.contractAddress))
